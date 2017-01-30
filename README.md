@@ -2,6 +2,8 @@
 
 React Native Grafana client
 
+Currently targeting APIs provided by Grafana 4.1+
+
 Currently supported:
 * Dashboard loading
 * PNG rendered graphs
