@@ -56,7 +56,6 @@ export class App extends Component {
             this.props.dispatch(recieveGrafanaUrl(url))
         }).done()
 
-        this.selectDashboard = this.selectDashboard.bind(this);
         this.getTemplateVar = this.getTemplateVar.bind(this);
         this.renderRow = this.renderRow.bind(this);
         this.renderListModal = this.renderListModal.bind(this);
@@ -93,14 +92,11 @@ export class App extends Component {
         }
         if (nextProps.dashboardList.list !== this.props.dashboardList.list) {
             this.setState({
-                dashboardListDataSource: this.state.dashboardListDataSource.cloneWithRows(nextProps.dashboardList.list)
+                dashboardListDataSource: this.state.dashboardListDataSource.cloneWithRows(
+                    nextProps.dashboardList.list
+                    )
             })
         }
-    }
-
-
-    selectDashboard(dashboard) {
-        this.props.dispatch(selectDashboard(dashboard));
     }
 
     getTemplateVar(key) {
@@ -172,7 +168,10 @@ export class App extends Component {
                                                 <TouchableOpacity key={key2} onPress={() => {
                                                     dispatch(setTemplateVar(row.name,val.text))
                                                 }}>
-                                                    <Text style={[Styles.modalText, {fontWeight: fontWeight, fontSize: 15}]}>{val.text}</Text>
+                                                    <Text style={[
+                                                        Styles.modalText, 
+                                                        {fontWeight: fontWeight, fontSize: 15}
+                                                        ]}>{val.text}</Text>
                                                 </TouchableOpacity>
                                             )
                                         })}
@@ -184,7 +183,11 @@ export class App extends Component {
 
                     <TouchableOpacity onPress={() => {
                         dispatch(closeTemplateModal())
-                        dispatch(refreshDashboard(dashboardList.selectedDashboard, dashboard.url, dashboard.apiKey));
+                        dispatch(refreshDashboard(
+                            dashboardList.selectedDashboard, 
+                            dashboard.url, 
+                            dashboard.apiKey
+                            ));
                     }}>
                         <Text style={Styles.modalText}>close</Text>
                     </TouchableOpacity>
@@ -309,7 +312,11 @@ export class App extends Component {
                         <RefreshControl
                             refreshing={dashboard.isFetching}
                             onRefresh={() => {
-                                dispatch(refreshDashboard(dashboardList.selectedDashboard, dashboard.url, dashboard.apiKey));
+                                dispatch(refreshDashboard(
+                                    dashboardList.selectedDashboard, 
+                                    dashboard.url, 
+                                    dashboard.apiKey
+                                    ));
                             }}
                             tintColor={'#FFFFFF'}
                         />
