@@ -1,5 +1,14 @@
 # Graffy
 
-currently under development, only tested on IOS for now
+React Native Grafana client
 
-`react-native run-ios`
+Currently supported:
+* Dashboard loading
+* PNG rendered graphs
+* Templating Vars
+* Templating Datasources
+
+Planned:
+* Time range adjustment
+* Multiple grafana server profiles
+* Tooltips/dynamic graph rendering
