@@ -13,27 +13,8 @@ import {
 import Modal from 'react-native-simple-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux'
-import {
-    fetchDashboard,
-    fetchDashboardList,
-    refreshDashboard,
-    recieveDashboard,
-    selectDashboard,
-    toggleDashboardList,
-    recieveGrafanaKey,
-    recieveGrafanaUrl,
-    openTemplateModal,
-    closeTemplateModal,
-    setTemplateVar,
-    openSettingsModal,
-    closeSettingsModal,
-} from './actions'
-import {
-    getGrafanaKey,
-    getGrafanaUrl,
-    setGrafanaKey,
-    setGrafanaUrl,
-} from './store'
+import * as actions from './actions'
+import * as dataStore from './store'
 import Styles from './styles'
 import Graph from './components/graph'
 
@@ -50,10 +31,10 @@ export class App extends Component {
         };
 
         getGrafanaKey((key) => {
-            this.props.dispatch(recieveGrafanaKey(key))
+            this.props.dispatch(actions.recieveGrafanaKey(key))
         }).done()
         getGrafanaUrl((url) => {
-            this.props.dispatch(recieveGrafanaUrl(url))
+            this.props.dispatch(actions.recieveGrafanaUrl(url))
         }).done()
 
         this.getTemplateVar = this.getTemplateVar.bind(this);
@@ -74,7 +55,7 @@ export class App extends Component {
             const { dispatch, dashboard, dashboardList } = nextProps
             dispatch(fetchDashboardList(dashboard.url,dashboard.apiKey))
             dispatch(
-                fetchDashboard(
+                actions.fetchDashboard(
                     dashboardList.selectedDashboard,
                     dashboard.url,
                     dashboard.apiKey
@@ -83,7 +64,7 @@ export class App extends Component {
         }
         if (nextProps.dashboardList.selectedDashboard !== this.props.dashboardList.selectedDashboard) {
             const { dispatch, dashboardList, dashboard} = nextProps
-            dispatch(fetchDashboard(dashboardList.selectedDashboard, dashboard.url, dashboard.apiKey))
+            dispatch(actions.fetchDashboard(dashboardList.selectedDashboard, dashboard.url, dashboard.apiKey))
         }
         if (nextProps.panelList !== this.props.panelList) {
             this.setState({
@@ -212,9 +193,9 @@ export class App extends Component {
                     renderRow={rowData => {
                         return (
                             <TouchableOpacity onPress={() => {
-                                dispatch(recieveDashboard({}));
-                                dispatch(selectDashboard(rowData.uri.replace("db/","")))
-                                dispatch(toggleDashboardList())
+                                dispatch(actions.recieveDashboard({}));
+                                dispatch(actions.selectDashboard(rowData.uri.replace("db/","")))
+                                dispatch(actions.toggleDashboardList())
                             }}>
                                 <Text style={Styles.modalText}>{rowData.title}</Text>
                             </TouchableOpacity>

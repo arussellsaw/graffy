@@ -6,8 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "react": "15.3.2",
-    "react-native": "0.34.0",
+    "react": "^15.4.2",
+    "react-native": "^0.40.0",
     "react-native-dropdown": "0.0.6",
     "react-native-image-progress": "^0.6.0",
     "react-native-list-popover": "^1.0.5",
