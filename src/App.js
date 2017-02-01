@@ -30,10 +30,10 @@ export class App extends Component {
             dashboardListDataSource: dlds
         };
 
-        getGrafanaKey((key) => {
+        dataStore.getGrafanaKey((key) => {
             this.props.dispatch(actions.recieveGrafanaKey(key))
         }).done()
-        getGrafanaUrl((url) => {
+        dataStore.getGrafanaUrl((url) => {
             this.props.dispatch(actions.recieveGrafanaUrl(url))
         }).done()
 
@@ -53,7 +53,7 @@ export class App extends Component {
             this.props.dashboard.url != nextProps.dashboard.url)
         ) {
             const { dispatch, dashboard, dashboardList } = nextProps
-            dispatch(fetchDashboardList(dashboard.url,dashboard.apiKey))
+            dispatch(actions.fetchDashboardList(dashboard.url,dashboard.apiKey))
             dispatch(
                 actions.fetchDashboard(
                     dashboardList.selectedDashboard,
@@ -133,6 +133,9 @@ export class App extends Component {
                     <View style={{marginTop: 20}}>
                         {
                             templating.map((row,key) => {
+                                if (row.type == "adhoc") {
+                                    return
+                                }
                                 var selected = this.getTemplateVar(row.name)
                                 if (selected === null) {
                                     selected = row.current.value
@@ -142,12 +145,13 @@ export class App extends Component {
                                         <Text style={Styles.modalText}>{row.name}</Text>
                                         {row.options.map((val,key2) => {
                                             var fontWeight = '300'
+                                            console.log(val)
                                             if (val.value === selected) {
                                                 fontWeight = '700'
                                             }
                                             return (
                                                 <TouchableOpacity key={key2} onPress={() => {
-                                                    dispatch(setTemplateVar(row.name,val.text))
+                                                    dispatch(actions.setTemplateVar(row.name,val.text))
                                                 }}>
                                                     <Text style={[
                                                         Styles.modalText, 
@@ -163,8 +167,8 @@ export class App extends Component {
                     </View>
 
                     <TouchableOpacity onPress={() => {
-                        dispatch(closeTemplateModal())
-                        dispatch(refreshDashboard(
+                        dispatch(actions.closeTemplateModal())
+                        dispatch(actions.refreshDashboard(
                             dashboardList.selectedDashboard, 
                             dashboard.url, 
                             dashboard.apiKey
@@ -225,7 +229,7 @@ export class App extends Component {
                     autoCapitalise={'none'}
                     placeholder={'api key'}
                     onChangeText={(value) => {
-                        dispatch(recieveGrafanaKey(value))
+                        dispatch(actions.recieveGrafanaKey(value))
                     }}
                     value={dashboard.apiKey}
                     />
@@ -235,14 +239,14 @@ export class App extends Component {
                     autoCapitalise={'none'}
                     placeholder={'url'}
                     onChangeText={(value) => {
-                        dispatch(recieveGrafanaUrl(value))
+                        dispatch(actions.recieveGrafanaUrl(value))
                     }}
                     value={dashboard.url}
                     />
                     <TouchableOpacity onPress={() => {
-                        setGrafanaKey(dashboard.apiKey)
-                        setGrafanaUrl(dashboard.url)
-                        dispatch(closeSettingsModal())
+                        dataStore.setGrafanaKey(dashboard.apiKey)
+                        dataStore.setGrafanaUrl(dashboard.url)
+                        dispatch(actions.closeSettingsModal())
                     }}>
                         <Text style={Styles.modalText}>save</Text>
                     </TouchableOpacity>
@@ -261,19 +265,19 @@ export class App extends Component {
                 <View style={Styles.header}>
                     <View style={Styles.headerContainer}>
                         <TouchableOpacity onPress={() => {
-                            dispatch(openTemplateModal())
+                            dispatch(actions.openTemplateModal())
                         }}>
                             <View style={Styles.sideIconLeft}>
                                 <Icon name="tags" size={20} color="#FFFFFF"/>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-                            dispatch(toggleDashboardList());
+                            dispatch(actions.toggleDashboardList());
                         }}>
                             <Text style={Styles.headerText}>{dashboardList.selectedDashboard}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
-                            dispatch(openSettingsModal())
+                            dispatch(actions.openSettingsModal())
                         }}>
                             <View style={Styles.sideIconRight}>
                                 <Icon name="gear" size={20} color="#FFFFFF"/>
@@ -293,7 +297,7 @@ export class App extends Component {
                         <RefreshControl
                             refreshing={dashboard.isFetching}
                             onRefresh={() => {
-                                dispatch(refreshDashboard(
+                                dispatch(actions.refreshDashboard(
                                     dashboardList.selectedDashboard, 
                                     dashboard.url, 
                                     dashboard.apiKey

@@ -91,16 +91,18 @@ export function recieveDashboardList(dashboardList) {
 export function fetchDashboardList(grafanaUrl, apiKey) {
     return dispatch => {
         dispatch(requestDashboardList());
-        return fetch(grafanaUrl+'/api/search?query=&starred=false', {
+        return fetch(grafanaUrl+'/api/search', {
             method: "get",
             headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': 'Bearer '+apiKey
             }
         })
             .then(response => response.json())
             .then(json => dispatch(recieveDashboardList(json)))
             .catch(function(err) {
-                console.log(err);
+                console.log(err.message);
             });
     }
 }
@@ -132,12 +134,15 @@ export function fetchDashboard(dashboard, grafanaUrl, apiKey) {
         return fetch(grafanaUrl+'/api/dashboards/db/'+dashboard, {
             method: "get",
             headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': 'Bearer '+apiKey
             }
         })
             .then(response => response.json())
             .then(json => dispatch(recieveDashboard(json)))
             .catch(function(err) {
+                console.log("oh no!")
                 console.log(err);
             });
     }
